@@ -1,0 +1,30 @@
+import os
+import shutil
+from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
+
+def trim_video():
+    input_video = input("Enter the path of the video file (not in quotes and double '\\'): ")  # Video file path input
+    output_video = input("Enter Output Video name (with extension as .mp4): ")
+
+    start_time_trim = float(input("Enter the start time (in seconds): "))  # Start time input
+    end_time_trim = float(input("Enter the end time (in seconds): "))  # End time input
+
+    try:
+        temp_output_file = "temp_trimmed.mp4"
+
+        ffmpeg_extract_subclip(input_video, start_time_trim, end_time_trim, targetname=temp_output_file)
+
+        if os.path.exists(output_video):
+            os.remove(output_video)  # Remove the original file if it exists
+
+        # Replace with the trimmed file
+        shutil.move(temp_output_file, output_video)
+
+        print("Video trimmed successfully!")
+    except FileNotFoundError:
+        print("File not found. Please provide a valid file path.")
+    except Exception as e:
+        print(f"Error trimming video: {str(e)}")
+
+if __name__ == "__main__":
+    trim_video()
